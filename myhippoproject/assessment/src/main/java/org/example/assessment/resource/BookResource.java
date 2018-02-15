@@ -2,6 +2,8 @@ package org.example.assessment.resource;
 
 import org.example.assessment.model.Book;
 import org.example.assessment.model.Chapter;
+import org.hippoecm.repository.HippoRepository;
+import org.hippoecm.repository.HippoRepositoryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,8 +29,10 @@ public class BookResource {
 
     private final Session systemSession;
 
-    public BookResource(Session systemSession) {
+    public BookResource(Session systemSession) throws RepositoryException {
+
         this.systemSession = systemSession;
+       /* this.systemSession = systemSession;*/
 
     }
 
@@ -37,7 +41,7 @@ public class BookResource {
     @Produces({"application/json"})
     @GET
     public List<Book> listBooks() {
-
+        log.info("List books service is called");
         return fetchBooks();
     }
 
@@ -45,18 +49,31 @@ public class BookResource {
     @Produces({"application/json"})
     @GET
     public List<Book> searchBooks(@QueryParam("text") String text) {
-
+        log.info("Search books service is called");
         return queryBooks(text);
     }
 
     @Path("/")
     @Consumes({"application/json"})
     @POST
-    public void addBooks( List<Book> books) {
-        saveBooks(books);
+    public boolean addBooks(List<Book> books) {
+        System.out.println("add books");
+        log.info("Add books service is called");
+        return saveBooks(books);
     }
 
-    private void saveBooks(List<Book> books) {
+    private boolean saveBooks(List<Book> books) {
+
+        /*HippoRepository repository = null;
+        Session session = null;
+        try {
+            repository =HippoRepositoryFactory.getHippoRepository("storage");
+            session = repository.login("admin", "admin".toCharArray());
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+            return false;
+        }
+*/
 
         try {
 
@@ -71,11 +88,11 @@ public class BookResource {
             }
 
             // sets books node type as nt:folder
-            booksNode.setPrimaryType(NodeType.NT_FOLDER);
+            booksNode.setPrimaryType(NodeType.NT_UNSTRUCTURED);
 
             //iterate over books and add child node for each of them
             for (Book book : books) {
-                Node bookNode = booksNode.addNode(book.getName(), NodeType.NT_UNSTRUCTURED);
+                Node bookNode = booksNode.addNode(book.getName());
                 bookNode.setProperty("name", book.getName());
                 bookNode.setProperty("author", book.getAuthor());
                 bookNode.setProperty("introduction", book.getIntroduction());
@@ -84,9 +101,11 @@ public class BookResource {
             }
 
             systemSession.save();
+            return systemSession.nodeExists("/content/documents/myhippoproject/books");
         } catch (RepositoryException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     /**
@@ -147,10 +166,21 @@ public class BookResource {
      * @return list of books
      */
     private List<Book> fetchBooks() {
+
+       /* HippoRepository repository = null;
+        Session session = null;
+        try {
+            repository =HippoRepositoryFactory.getHippoRepository("storage");
+            session = repository.login("admin", "admin".toCharArray());
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+            return null;
+        }*/
         try {
             String path = "content/documents/myhippoproject/books";
             List<Book> books = new ArrayList<>();
             if (!systemSession.getRootNode().hasNode(path)) {
+                log.info("No book found in repository");
                 systemSession.getRootNode().addNode(path);
                 return books;
             }

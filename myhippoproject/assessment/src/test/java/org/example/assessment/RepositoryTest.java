@@ -30,11 +30,7 @@ public class RepositoryTest extends RepositoryTestCase {
         assertTrue(session.nodeExists("/books"));
     }
 
-    @BeforeClass
 
-    public static void setUpClass() throws Exception {
-        background = HippoRepositoryFactory.getHippoRepository("storage");
-    }
     @Before
     @Override
     public void setUp() throws Exception {

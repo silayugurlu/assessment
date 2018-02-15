@@ -1,0 +1,14 @@
+/content/documents/myhippoproject/books:
+  jcr:primaryType: nt:unstructured
+  /book1:
+    jcr:primaryType: nt:unstructured
+    ISBN: adfdsef
+    author: author
+    introduction: intf
+    name: book1
+  /book2:
+    jcr:primaryType: nt:unstructured
+    ISBN: adfdsef2
+    author: author2
+    introduction: intf2
+    name: book2
