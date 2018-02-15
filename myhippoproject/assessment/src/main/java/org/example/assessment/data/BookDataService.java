@@ -48,10 +48,9 @@ public class BookDataService {
                 booksNode = systemSession.getRootNode().getNode(PATH);
             } else {
                 booksNode = systemSession.getRootNode().addNode(PATH);
+                // sets books node type as nt:unstructured
+                booksNode.setPrimaryType(NodeType.NT_UNSTRUCTURED);
             }
-
-            // sets books node type as nt:folder
-            booksNode.setPrimaryType(NodeType.NT_UNSTRUCTURED);
 
             //iterate over books and add child node for each of them
             for (Book book : books) {
@@ -88,7 +87,7 @@ public class BookDataService {
             QueryManager manager = systemSession.getWorkspace().getQueryManager();
 
             //Query repository for the books containing text
-            Query query = manager.createQuery("//*[@paragraphs='"+text+"']", Query.XPATH);
+            Query query = manager.createQuery("//*[jcr:like(@paragraphs,'%"+text+"%')]", Query.XPATH);
 
             QueryResult r = query.execute();
             for (NodeIterator nodeIterator = r.getNodes(); nodeIterator.hasNext(); ) {
