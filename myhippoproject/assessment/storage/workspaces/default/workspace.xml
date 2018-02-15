@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><Workspace name="default">
+
+    <FileSystem class="org.apache.jackrabbit.core.fs.mem.MemoryFileSystem"/>
+
+    <PersistenceManager class="org.apache.jackrabbit.core.persistence.mem.InMemBundlePersistenceManager">
+      <param name="persistent" value="false"/>
+    </PersistenceManager>
+
+    <SearchIndex class="org.hippoecm.repository.FacetedNavigationEngineImpl">
+      <param name="directoryManagerClass" value="org.apache.jackrabbit.core.query.lucene.directory.RAMDirectoryManager"/>
+      <param name="indexingConfiguration" value="indexing_configuration.xml"/>
+      <param name="indexingConfigurationClass" value="org.hippoecm.repository.query.lucene.ServicingIndexingConfigurationImpl"/>
+      <param name="path" value="${wsp.home}/index"/>
+      <param name="useCompoundFile" value="true"/>
+      <param name="minMergeDocs" value="1000"/>
+      <param name="volatileIdleTime" value="10"/>
+      <param name="maxMergeDocs" value="1000000000"/>
+      <param name="mergeFactor" value="5"/>
+      <param name="maxFieldLength" value="10000"/>
+      <param name="bufferSize" value="1000"/>
+      <param name="cacheSize" value="100000"/>
+      <param name="forceConsistencyCheck" value="false"/>
+      <param name="enableConsistencyCheck" value="false"/>
+      <param name="autoRepair" value="true"/>
+      <param name="analyzer" value="org.hippoecm.repository.query.lucene.StandardHippoAnalyzer"/>
+      <param name="queryClass" value="org.apache.jackrabbit.core.query.QueryImpl"/>
+      <param name="respectDocumentOrder" value="false"/>
+      <param name="resultFetchSize" value="10000"/>
+      <param name="extractorPoolSize" value="0"/>
+      <param name="extractorTimeout" value="100"/>
+      <param name="extractorBackLogSize" value="100"/>
+      <param name="excerptProviderClass" value="org.apache.jackrabbit.core.query.lucene.DefaultHTMLExcerpt"/>
+      <!-- supportHighlighting value is ignored, see REPO-711 -->
+      <param name="supportHighlighting" value="false"/>
+
+      <param name="supportSimilarityOnStrings" value="true"/>
+      <param name="supportSimilarityOnBinaries" value="false"/>
+      <param name="slowAlwaysExactSizedQueryResult" value="false"/>
+
+      <!-- optional cache parameters for faceted engine. The default size when not configured is 1000 for both parameters -->
+      <!-- param name="docIdSetCacheSize" value="1000"/>
+      <param name="facetValueCountMapCacheSize" value="1000"/-->
+    </SearchIndex>
+
+    <ISMLocking class="org.apache.jackrabbit.core.state.FineGrainedISMLocking"/>
+  </Workspace>
