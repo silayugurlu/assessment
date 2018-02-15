@@ -1,7 +1,9 @@
 package org.example.assessment.model;
 
 import java.util.Map;
-
+/**
+ * @author silay
+ */
 public class BookStore {
 
     private Map<String,Book> books;

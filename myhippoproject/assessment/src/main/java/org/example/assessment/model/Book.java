@@ -1,15 +1,15 @@
 package org.example.assessment.model;
 
-
-import java.util.List;
-
+/**
+ * @author silay
+ */
 public class Book {
 
     private String name;
     private String author;
     private String ISBN;
     private String introduction;
-    private String[] paragraphs;
+    private String paragraphs;
 
     public String getName() {
         return name;
@@ -44,11 +44,11 @@ public class Book {
     }
 
 
-    public String[] getParagraphs() {
+    public String getParagraphs() {
         return paragraphs;
     }
 
-    public void setParagraphs(String[] paragraphs) {
+    public void setParagraphs(String paragraphs) {
         this.paragraphs = paragraphs;
     }
 }

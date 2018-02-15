@@ -2,6 +2,7 @@ package org.example.assessment.resource;
 
 import org.example.assessment.model.Book;
 import org.example.assessment.model.BookStore;
+import org.example.assessment.util.BookUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,7 @@ import javax.jcr.observation.EventIterator;
 import javax.jcr.observation.EventListener;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,41 +32,46 @@ public class BookStoreResource {
 
     private BookStore bookStore;
 
-    private Book convertBook(Node bookNode) throws RepositoryException {
-        Book book = new Book();
-
-        book.setName(bookNode.getProperty("name").getString());
-        book.setAuthor(bookNode.getProperty("author").getString());
-        book.setIntroduction(bookNode.getProperty("introduction").getString());
-        book.setISBN(bookNode.getProperty("ISBN").getString());
-        //book.setParagraphs(bookNode.getProperty("paragraphs").getValues());
-        return book;
-
-    }
 
     public BookStoreResource(Session systemSession) {
         this.systemSession = systemSession;
+        this.bookStore = new BookStore();
 
+        //initially load books to store
+        updateBooks();
         try {
+            // add event listener to listen changes of books from console
             this.systemSession.getWorkspace().getObservationManager().addEventListener(new EventListener() {
                 public void onEvent(EventIterator events) {
+                    log.info("Books changed from console");
+                    //update book store
                     updateBooks();
                 }
             }, Event.NODE_ADDED | Event.NODE_MOVED | Event.NODE_REMOVED |
-                    Event.PROPERTY_ADDED | Event.PROPERTY_CHANGED | Event.PROPERTY_REMOVED | Event.PERSIST, "/books", true, null, null, false);
+                    Event.PROPERTY_ADDED | Event.PROPERTY_CHANGED | Event.PROPERTY_REMOVED | Event.PERSIST, "/content/documents/myhippoproject/books", true, null, null, false);
         } catch (RepositoryException e) {
-            e.printStackTrace();
+            log.error("Error adding event listener");
         }
 
     }
 
+    /**
+     * Lists books in book store object
+     *
+     * @return
+     */
     @Path("/")
+    @Produces({"application/json"})
     @GET
     public Map<String, Book> listBooks() {
+        log.info("Book store list service called");
         return bookStore.getBooks();
     }
 
 
+    /**
+     * Update books in book store object
+     */
     public void updateBooks() {
         try {
             String path = "content/documents/myhippoproject/books";
@@ -79,7 +86,7 @@ public class BookStoreResource {
             while (nodeIterator.hasNext()) {
                 try {
                     Node bookNode = nodeIterator.nextNode();
-                    books.put(bookNode.getName(), convertBook(bookNode));
+                    books.put(bookNode.getName(), BookUtil.convertBook(bookNode));
                 } catch (RepositoryException e) {
                     log.error("Error converting book node to pojo", e);
                 }

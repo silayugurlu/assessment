@@ -4,8 +4,6 @@ import javax.jcr.*;
 import javax.xml.bind.JAXBException;
 
 import org.example.assessment.helper.NodePrinter;
-import org.hippoecm.repository.HippoRepositoryFactory;
-import org.hippoecm.repository.WebCredentials;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -48,7 +46,7 @@ public class RepositoryTest extends RepositoryTestCase {
 
     @Test
     public void testTraverseQueries() throws RepositoryException {
-        session.getRepository().login(new SimpleCredentials("admin","admin".toCharArray()));
+        //session.getRepository().login(new SimpleCredentials("admin","admin".toCharArray()));
 
         // can read session data
          Node queriesNode = session.getNode("/hippo:configuration/hippo:queries");

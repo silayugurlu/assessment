@@ -2,7 +2,7 @@
   jcr:primaryType: nt:unstructured
   /book1:
     jcr:primaryType: nt:unstructured
-    ISBN: adfdsef
+    ISBN: isbndsef12345
     author: author
     introduction: intf
     name: book1
@@ -12,3 +12,15 @@
     author: author2
     introduction: intf2
     name: book2
+  /book4:
+    jcr:primaryType: nt:unstructured
+    ISBN: adfdsef
+    author: author
+    introduction: injjtf
+    name: book4
+  /book5:
+    jcr:primaryType: nt:unstructured
+    ISBN: adfdsef2
+    author: author2
+    introduction: intff2
+    name: book5

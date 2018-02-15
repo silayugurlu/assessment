@@ -1,7 +1,9 @@
 package org.example.assessment;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import org.example.assessment.resource.BookResource;
+import org.example.assessment.data.BookDataService;
+import org.example.assessment.resource.BookStoreResource;
+import org.example.assessment.rest.BookRestService;
 import org.onehippo.repository.jaxrs.RepositoryJaxrsEndpoint;
 import org.onehippo.repository.jaxrs.RepositoryJaxrsService;
 import org.onehippo.repository.modules.DaemonModule;
@@ -10,8 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 
 /**
  * @author silay
@@ -25,8 +25,14 @@ public class BookModule implements DaemonModule {
         RepositoryJaxrsService.addEndpoint(
                 new RepositoryJaxrsEndpoint("/books")
                         .singleton(new JacksonJsonProvider())
-                        .singleton(new BookResource(systemSession)));
+                        .singleton(new BookRestService(new BookDataService(systemSession))));
         log.debug("/books endpoint added");
+        RepositoryJaxrsService.addEndpoint(
+                new RepositoryJaxrsEndpoint("/bookstore")
+                        .singleton(new JacksonJsonProvider())
+                        .singleton(new BookStoreResource(systemSession)));
+        log.debug("/bookstore endpoint added");
+
     }
 
     @Override
