@@ -1,18 +1,19 @@
 package org.example.assessment.model;
 
+import java.util.List;
 import java.util.Map;
 /**
  * @author silay
  */
 public class BookStore {
 
-    private Map<String,Book> books;
+    private List<Book> books;
 
-    public Map<String, Book> getBooks() {
+    public List<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(Map<String, Book> books) {
+    public void setBooks(List<Book> books) {
         this.books = books;
     }
 }

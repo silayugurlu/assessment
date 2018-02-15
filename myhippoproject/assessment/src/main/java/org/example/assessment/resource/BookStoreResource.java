@@ -63,7 +63,7 @@ public class BookStoreResource {
     @Path("/")
     @Produces({"application/json"})
     @GET
-    public Map<String, Book> listBooks() {
+    public List<Book> listBooks() {
         log.info("Book store list service called");
         return bookStore.getBooks();
     }
@@ -75,7 +75,7 @@ public class BookStoreResource {
     public void updateBooks() {
         try {
             String path = "content/documents/myhippoproject/books";
-            Map<String, Book> books = new HashMap<>();
+            List<Book> books = new ArrayList<>();
             if (!systemSession.getRootNode().hasNode(path)) {
                 bookStore.setBooks(null);
                 return;
@@ -86,7 +86,7 @@ public class BookStoreResource {
             while (nodeIterator.hasNext()) {
                 try {
                     Node bookNode = nodeIterator.nextNode();
-                    books.put(bookNode.getName(), BookUtil.convertBook(bookNode));
+                    books.add(BookUtil.convertBook(bookNode));
                 } catch (RepositoryException e) {
                     log.error("Error converting book node to pojo", e);
                 }
